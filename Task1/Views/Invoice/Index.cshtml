@@ -1,0 +1,38 @@
+﻿@model List<Task1.DataModel.Invoice>
+
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+<h1>Invoices</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Code</th>
+            <th>Registration Date</th>
+            <th>Customer Name</th>
+            <th>Products</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invoice in Model)
+        {
+            <tr>
+                <td>@invoice.Id</td>
+                <td>@invoice.Code</td>
+                <td>@invoice.RegisterationDate.ToString("yyyy-MM-dd")</td>
+                <td>@invoice.CustomerName</td>
+                <td>
+                    <ul>
+                        @foreach (var product in invoice.Products)
+                        {
+                            <li>@product.Name - @product.Price.ToString("C")</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

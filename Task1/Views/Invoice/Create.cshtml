@@ -1,0 +1,101 @@
+﻿@model Task1.DataModel.Invoice
+@{
+    ViewData["Title"] = "Create Invoice";
+    var products = ViewBag.Products as List<Task1.DataModel.Products>;
+}
+
+<h1>Create Invoice</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Code" class="control-label"></label>
+        <input asp-for="Code" class="form-control" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RegisterationDate" class="control-label"></label>
+        <input asp-for="RegisterationDate" class="form-control" />
+        <span asp-validation-for="RegisterationDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CustomerName" class="control-label"></label>
+        <input asp-for="CustomerName" class="form-control" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Products</label>
+        <select id="productSelect" class="form-control" onchange="updateProductPrice()">
+            <option value="">Select a product</option>
+            @foreach (var product in products)
+            {
+                <option value="@product.Id" data-price="@product.Price">@product.Name</option>
+            }
+        </select>
+        <input type="number" id="productPrice" class="form-control" placeholder="Enter price" />
+        <button type="button" class="btn btn-primary" onclick="addProduct()">Add Product</button>
+    </div>
+    <div class="form-group">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="productsTable">
+            </tbody>
+        </table>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function updateProductPrice() {
+            var productSelect = document.getElementById("productSelect");
+            var selectedOption = productSelect.options[productSelect.selectedIndex];
+            var productPriceInput = document.getElementById("productPrice");
+            if (selectedOption.value) {
+                productPriceInput.value = selectedOption.getAttribute("data-price");
+            } else {
+                productPriceInput.value = '';
+            }
+        }
+
+        function addProduct() {
+            var productSelect = document.getElementById("productSelect");
+            var selectedOption = productSelect.options[productSelect.selectedIndex];
+            var productPriceInput = document.getElementById("productPrice");
+            var productPrice = productPriceInput.value;
+
+            if (selectedOption.value && productPrice) {
+                var productId = selectedOption.value;
+                var productName = selectedOption.text;
+
+                var index = document.querySelectorAll('#productsTable tr').length;
+                var row = `<tr>
+                    <td>${productName}</td>
+                    <td>${productPrice}</td>
+                    <td>
+                        <input type="hidden" name="products[${index}].Id" value="${productId}" />
+                        <input type="hidden" name="products[${index}].Price" value="${productPrice}" />
+                        <button type="button" class="btn btn-danger" onclick="removeProduct(this)">Remove</button>
+                    </td>
+                </tr>`;
+                document.querySelector('#productsTable').insertAdjacentHTML('beforeend', row);
+
+                // Clear the input fields
+                productSelect.selectedIndex = 0;
+                productPriceInput.value = '';
+            }
+        }
+
+        function removeProduct(button) {
+            button.closest('tr').remove();
+        }
+    </script>
+}
