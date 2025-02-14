@@ -25,8 +25,8 @@ namespace Task1.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var user = userService.Login(username, password);
-            if (user == null)
+            bool user =await userService.Login(username, password);
+            if (user == false)
             {
                 ViewBag.Message = "Invalid username or password";
                 return View();
@@ -44,6 +44,13 @@ namespace Task1.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
 
     }

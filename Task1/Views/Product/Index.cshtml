@@ -8,17 +8,17 @@
     <tr>
         <th>Name</th>
         <th>Price</th>
-        @* <th>Actions</th> *@
+        <th>Actions</th>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
             <td>@item.Name</td>
             <td>@item.Price</td>
-            @* <td> *@
-            @*     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) | *@
-            @*     @Html.ActionLink("Delete", "Delete", new { id = item.Id }) *@
-            @* </td> *@
+            <td>
+                @Html.ActionLink("Edite", "Edite", new { id = item.Id }) | 
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) 
+            </td>
         </tr>
     }
 </table>

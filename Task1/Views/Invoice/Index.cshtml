@@ -6,21 +6,26 @@
 
 <h1>Invoices</h1>
 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
+            
             <th>Code</th>
             <th>Registration Date</th>
             <th>Customer Name</th>
             <th>Products</th>
+            <th>Action</th>
+
         </tr>
     </thead>
     <tbody>
         @foreach (var invoice in Model)
         {
             <tr>
-                <td>@invoice.Id</td>
+               
                 <td>@invoice.Code</td>
                 <td>@invoice.RegisterationDate.ToString("yyyy-MM-dd")</td>
                 <td>@invoice.CustomerName</td>
@@ -31,6 +36,10 @@
                             <li>@product.Name - @product.Price.ToString("C")</li>
                         }
                     </ul>
+                </td>
+                <td>
+                    @Html.ActionLink("Print", "Print", new { InvioceId = invoice.Id })
+
                 </td>
             </tr>
         }

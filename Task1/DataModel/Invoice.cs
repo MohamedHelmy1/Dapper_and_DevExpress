@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Code { get; set; }
-        public DateTime RegisterationDate { get; set; }
+        public DateTime RegisterationDate { get; set; } = DateTime.Now;
         public string CustomerName { get; set; }
 
         public List<Products> Products { get; set; }

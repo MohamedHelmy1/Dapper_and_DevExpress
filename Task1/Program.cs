@@ -6,6 +6,8 @@ using System.Data;
 using Task1.Services.Invoices;
 using Task1.Services.Product;
 using Task1.Services.Users;
+using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
 
 namespace Task1
 {
@@ -37,6 +39,13 @@ namespace Task1
                 });
 
             builder.Services.AddAuthorization();
+            builder.Services.AddDevExpressControls();
+            builder.Services.ConfigureReportingServices(configurator => {
+                configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+                    viewerConfigurator.UseCachedReportSourceBuilder();
+                });
+            });
+
             builder.Services.AddScoped<IDbConnection>(sp =>
              new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -68,6 +77,8 @@ namespace Task1
 
             app.UseAuthentication(); 
             app.UseAuthorization();
+            app.UseDevExpressControls();
+            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
             app.MapControllerRoute(
                 name: "default",
